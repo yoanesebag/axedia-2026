@@ -11,67 +11,17 @@
         <image:image>
             <image:loc>https://axedia.io/Images/og-image.png</image:loc>
             <image:title>Axedia - Law Firm Marketing Agency</image:title>
-            <image:caption>Legal lead generation and attorney marketing services</image:caption>
+            <image:caption>Legal lead generation and attorney marketing services for mass tort, personal injury, and class action law firms</image:caption>
         </image:image>
         <image:image>
             <image:loc>https://axedia.io/Images/logo-icon.png</image:loc>
-            <image:title>Axedia Logo</image:title>
+            <image:title>Axedia Logo - Legal Marketing Agency</image:title>
         </image:image>
         <image:image>
             <image:loc>https://axedia.io/Images/dashboard.png</image:loc>
             <image:title>Axedia Client Dashboard - Legal Lead Tracking</image:title>
-            <image:caption>Real-time lead tracking dashboard for law firm clients</image:caption>
+            <image:caption>Real-time lead tracking dashboard for law firm clients with call recordings and compliance documentation</image:caption>
         </image:image>
-    </url>
-
-    <!-- Section anchors for better indexing -->
-    <url>
-        <loc>https://axedia.io/#about</loc>
-        <lastmod>2025-12-14</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
-    </url>
-
-    <url>
-        <loc>https://axedia.io/#why-us</loc>
-        <lastmod>2025-12-14</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
-    </url>
-
-    <url>
-        <loc>https://axedia.io/#methodology</loc>
-        <lastmod>2025-12-14</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
-
-    <url>
-        <loc>https://axedia.io/#live-transfer</loc>
-        <lastmod>2025-12-14</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
-    </url>
-
-    <url>
-        <loc>https://axedia.io/#testimonials</loc>
-        <lastmod>2025-12-14</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
-
-    <url>
-        <loc>https://axedia.io/#faq</loc>
-        <lastmod>2025-12-14</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
-
-    <url>
-        <loc>https://axedia.io/#pilot</loc>
-        <lastmod>2025-12-14</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
     </url>
 
 </urlset>
