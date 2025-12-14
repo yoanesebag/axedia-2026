@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Axedia - Client Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <a href="index.html" class="logo">
+                <img src="Images/logo-icon.png" alt="Axedia" class="logo-icon-img">
+                <span class="logo-text">Axedia</span>
+            </a>
+            <!-- Client Selector (Admin Only) -->
+            <div class="client-selector" id="clientSelector" style="display: none;">
+                <label for="clientSelect">Viewing:</label>
+                <select id="clientSelect">
+                    <!-- Options populated by JS -->
+                </select>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" data-section="overview">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"/>
+                    <rect x="14" y="3" width="7" height="7"/>
+                    <rect x="14" y="14" width="7" height="7"/>
+                    <rect x="3" y="14" width="7" height="7"/>
+                </svg>
+                <span>Overview</span>
+            </a>
+            <a href="#" class="nav-item" data-section="leads">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+                <span>Leads</span>
+            </a>
+            <a href="#" class="nav-item" data-section="calls">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                </svg>
+                <span>Calls</span>
+            </a>
+            <a href="#" class="nav-item" data-section="compliance">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+                <span>Compliance</span>
+            </a>
+            <a href="#" class="nav-item" data-section="reports">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                    <polyline points="10 9 9 9 8 9"/>
+                </svg>
+                <span>Reports</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">SL</div>
+                <div class="user-details">
+                    <span class="user-name" id="userName">Sharp Law LLP</span>
+                    <span class="user-role" id="userRole">Client</span>
+                </div>
+            </div>
+            <button class="logout-btn" id="logoutBtn" title="Sign Out">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                    <polyline points="16 17 21 12 16 7"/>
+                    <line x1="21" y1="12" x2="9" y2="12"/>
+                </svg>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <h1 class="page-title">Overview</h1>
+                <p class="page-subtitle">Your lead generation performance at a glance</p>
+            </div>
+            <div class="header-right">
+                <div class="date-filter">
+                    <select id="dateRange">
+                        <option value="7">Last 7 days</option>
+                        <option value="30" selected>Last 30 days</option>
+                        <option value="90">Last 90 days</option>
+                        <option value="all">All time</option>
+                    </select>
+                </div>
+            </div>
+        </header>
+
+        <!-- Overview Section -->
+        <section id="overview" class="dashboard-section active">
+            <!-- Performance Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Total Leads</span>
+                        <div class="stat-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="stat-value">247</div>
+                    <div class="stat-change positive">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                        </svg>
+                        <span>+12% from last period</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Qualified Leads</span>
+                        <div class="stat-icon qualified">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                <polyline points="22 4 12 14.01 9 11.01"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="stat-value">183</div>
+                    <div class="stat-change positive">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                        </svg>
+                        <span>74% qualification rate</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Live Transfers</span>
+                        <div class="stat-icon transfers">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72"/>
+                                <polyline points="15 3 21 3 21 9"/>
+                                <line x1="10" y1="14" x2="21" y2="3"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="stat-value">156</div>
+                    <div class="stat-change positive">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                        </svg>
+                        <span>85% of qualified</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Signed Cases</span>
+                        <div class="stat-icon signed">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                                <path d="M9 15l2 2 4-4"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="stat-value">89</div>
+                    <div class="stat-change positive">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                        </svg>
+                        <span>57% conversion</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Cost Per Qualified Lead</span>
+                        <div class="stat-icon cost">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="1" x2="12" y2="23"/>
+                                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="stat-value">$127</div>
+                    <div class="stat-change positive">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/>
+                        </svg>
+                        <span>-8% from last period</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Leads Table -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Recent Leads</h2>
+                    <a href="#" class="view-all" data-section="leads">View All</a>
+                </div>
+                <div class="table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Phone</th>
+                                <th>Source</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="lead-name">John Martinez</td>
+                                <td class="lead-phone">(555) 123-4567</td>
+                                <td><span class="source-tag">Meta - NEC</span></td>
+                                <td><span class="status-tag status-signed">Signed</span></td>
+                                <td class="lead-date">Dec 13, 2025</td>
+                                <td class="actions">
+                                    <button class="btn-icon" title="View Details">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                            <circle cx="12" cy="12" r="3"/>
+                                        </svg>
+                                    </button>
+                                    <button class="btn-icon" title="Play Recording">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polygon points="5 3 19 12 5 21 5 3"/>
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="lead-name">Sarah Johnson</td>
+                                <td class="lead-phone">(555) 987-6543</td>
+                                <td><span class="source-tag">Meta - Tylenol</span></td>
+                                <td><span class="status-tag status-transferred">Transferred</span></td>
+                                <td class="lead-date">Dec 13, 2025</td>
+                                <td class="actions">
+                                    <button class="btn-icon" title="View Details">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                            <circle cx="12" cy="12" r="3"/>
+                                        </svg>
+                                    </button>
+                                    <button class="btn-icon" title="Play Recording">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polygon points="5 3 19 12 5 21 5 3"/>
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="lead-name">Michael Chen</td>
+                                <td class="lead-phone">(555) 456-7890</td>
+                                <td><span class="source-tag">Meta - NEC</span></td>
+                                <td><span class="status-tag status-qualified">Qualified</span></td>
+                                <td class="lead-date">Dec 12, 2025</td>
+                                <td class="actions">
+                                    <button class="btn-icon" title="View Details">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                            <circle cx="12" cy="12" r="3"/>
+                                        </svg>
+                                    </button>
+                                    <button class="btn-icon" title="Play Recording">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polygon points="5 3 19 12 5 21 5 3"/>
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="lead-name">Emily Rodriguez</td>
+                                <td class="lead-phone">(555) 321-0987</td>
+                                <td><span class="source-tag">Meta - Depo-Provera</span></td>
+                                <td><span class="status-tag status-contacted">Contacted</span></td>
+                                <td class="lead-date">Dec 12, 2025</td>
+                                <td class="actions">
+                                    <button class="btn-icon" title="View Details">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                            <circle cx="12" cy="12" r="3"/>
+                                        </svg>
+                                    </button>
+                                    <button class="btn-icon disabled" title="No Recording">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polygon points="5 3 19 12 5 21 5 3"/>
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="lead-name">David Thompson</td>
+                                <td class="lead-phone">(555) 654-3210</td>
+                                <td><span class="source-tag">Meta - NEC</span></td>
+                                <td><span class="status-tag status-new">New</span></td>
+                                <td class="lead-date">Dec 12, 2025</td>
+                                <td class="actions">
+                                    <button class="btn-icon" title="View Details">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                            <circle cx="12" cy="12" r="3"/>
+                                        </svg>
+                                    </button>
+                                    <button class="btn-icon disabled" title="No Recording">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polygon points="5 3 19 12 5 21 5 3"/>
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Leads Section -->
+        <section id="leads" class="dashboard-section">
+            <div class="section-controls">
+                <div class="filters">
+                    <div class="filter-group">
+                        <label>Status</label>
+                        <select id="statusFilter">
+                            <option value="all">All Statuses</option>
+                            <option value="new">New</option>
+                            <option value="contacted">Contacted</option>
+                            <option value="qualified">Qualified</option>
+                            <option value="transferred">Transferred</option>
+                            <option value="signed">Signed</option>
+                            <option value="not-signed">Not Signed</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Source</label>
+                        <select id="sourceFilter">
+                            <option value="all">All Sources</option>
+                            <option value="nec">NEC</option>
+                            <option value="tylenol">Tylenol</option>
+                            <option value="depo">Depo-Provera</option>
+                        </select>
+                    </div>
+                    <div class="search-box">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                        </svg>
+                        <input type="text" placeholder="Search leads..." id="leadSearch">
+                    </div>
+                </div>
+                <button class="btn btn-secondary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    Export
+                </button>
+            </div>
+
+            <div class="card">
+                <div class="table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Phone</th>
+                                <th>Email</th>
+                                <th>Source</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="lead-name">John Martinez</td>
+                                <td class="lead-phone">(555) 123-4567</td>
+                                <td class="lead-email">john.m@email.com</td>
+                                <td><span class="source-tag">Meta - NEC</span></td>
+                                <td><span class="status-tag status-signed">Signed</span></td>
+                                <td class="lead-date">Dec 13, 2025</td>
+                                <td class="actions">
+                                    <button class="btn-icon" title="View Details">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                            <circle cx="12" cy="12" r="3"/>
+                                        </svg>
+                                    </button>
+                                    <button class="btn-icon" title="Play Recording">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polygon points="5 3 19 12 5 21 5 3"/>
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="lead-name">Sarah Johnson</td>
+                                <td class="lead-phone">(555) 987-6543</td>
+                                <td class="lead-email">s.johnson@email.com</td>
+                                <td><span class="source-tag">Meta - Tylenol</span></td>
+                                <td><span class="status-tag status-transferred">Transferred</span></td>
+                                <td class="lead-date">Dec 13, 2025</td>
+                                <td class="actions">
+                                    <button class="btn-icon" title="View Details">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                            <circle cx="12" cy="12" r="3"/>
+                                        </svg>
+                                    </button>
+                                    <button class="btn-icon" title="Play Recording">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polygon points="5 3 19 12 5 21 5 3"/>
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="lead-name">Michael Chen</td>
+                                <td class="lead-phone">(555) 456-7890</td>
+                                <td class="lead-email">mchen@email.com</td>
+                                <td><span class="source-tag">Meta - NEC</span></td>
+                                <td><span class="status-tag status-qualified">Qualified</span></td>
+                                <td class="lead-date">Dec 12, 2025</td>
+                                <td class="actions">
+                                    <button class="btn-icon" title="View Details">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                            <circle cx="12" cy="12" r="3"/>
+                                        </svg>
+                                    </button>
+                                    <button class="btn-icon" title="Play Recording">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polygon points="5 3 19 12 5 21 5 3"/>
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="lead-name">Emily Rodriguez</td>
+                                <td class="lead-phone">(555) 321-0987</td>
+                                <td class="lead-email">emily.r@email.com</td>
+                                <td><span class="source-tag">Meta - Depo-Provera</span></td>
+                                <td><span class="status-tag status-contacted">Contacted</span></td>
+                                <td class="lead-date">Dec 12, 2025</td>
+                                <td class="actions">
+                                    <button class="btn-icon" title="View Details">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                            <circle cx="12" cy="12" r="3"/>
+                                        </svg>
+                                    </button>
+                                    <button class="btn-icon disabled" title="No Recording">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polygon points="5 3 19 12 5 21 5 3"/>
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="lead-name">David Thompson</td>
+                                <td class="lead-phone">(555) 654-3210</td>
+                                <td class="lead-email">d.thompson@email.com</td>
+                                <td><span class="source-tag">Meta - NEC</span></td>
+                                <td><span class="status-tag status-new">New</span></td>
+                                <td class="lead-date">Dec 12, 2025</td>
+                                <td class="actions">
+                                    <button class="btn-icon" title="View Details">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                            <circle cx="12" cy="12" r="3"/>
+                                        </svg>
+                                    </button>
+                                    <button class="btn-icon disabled" title="No Recording">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polygon points="5 3 19 12 5 21 5 3"/>
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="lead-name">Lisa Anderson</td>
+                                <td class="lead-phone">(555) 789-0123</td>
+                                <td class="lead-email">l.anderson@email.com</td>
+                                <td><span class="source-tag">Meta - Tylenol</span></td>
+                                <td><span class="status-tag status-not-signed">Not Signed</span></td>
+                                <td class="lead-date">Dec 11, 2025</td>
+                                <td class="actions">
+                                    <button class="btn-icon" title="View Details">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                            <circle cx="12" cy="12" r="3"/>
+                                        </svg>
+                                    </button>
+                                    <button class="btn-icon" title="Play Recording">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polygon points="5 3 19 12 5 21 5 3"/>
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="lead-name">Robert Wilson</td>
+                                <td class="lead-phone">(555) 234-5678</td>
+                                <td class="lead-email">rwilson@email.com</td>
+                                <td><span class="source-tag">Meta - NEC</span></td>
+                                <td><span class="status-tag status-signed">Signed</span></td>
+                                <td class="lead-date">Dec 11, 2025</td>
+                                <td class="actions">
+                                    <button class="btn-icon" title="View Details">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                            <circle cx="12" cy="12" r="3"/>
+                                        </svg>
+                                    </button>
+                                    <button class="btn-icon" title="Play Recording">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polygon points="5 3 19 12 5 21 5 3"/>
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="table-pagination">
+                    <span class="pagination-info">Showing 1-7 of 247 leads</span>
+                    <div class="pagination-controls">
+                        <button class="btn-pagination" disabled>&lt;</button>
+                        <button class="btn-pagination active">1</button>
+                        <button class="btn-pagination">2</button>
+                        <button class="btn-pagination">3</button>
+                        <span class="pagination-ellipsis">...</span>
+                        <button class="btn-pagination">36</button>
+                        <button class="btn-pagination">&gt;</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Calls Section -->
+        <section id="calls" class="dashboard-section">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Call Recordings</h2>
+                </div>
+                <div class="calls-list">
+                    <div class="call-item">
+                        <div class="call-info">
+                            <div class="call-lead">
+                                <span class="call-name">John Martinez</span>
+                                <span class="call-phone">(555) 123-4567</span>
+                            </div>
+                            <div class="call-meta">
+                                <span class="call-date">Dec 13, 2025 at 2:34 PM</span>
+                                <span class="call-duration">4:23</span>
+                                <span class="status-tag status-signed">Signed</span>
+                            </div>
+                        </div>
+                        <div class="call-player">
+                            <button class="play-btn">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="5 3 19 12 5 21 5 3"/>
+                                </svg>
+                            </button>
+                            <div class="waveform">
+                                <div class="waveform-bar" style="height: 20%"></div>
+                                <div class="waveform-bar" style="height: 45%"></div>
+                                <div class="waveform-bar" style="height: 70%"></div>
+                                <div class="waveform-bar" style="height: 55%"></div>
+                                <div class="waveform-bar" style="height: 85%"></div>
+                                <div class="waveform-bar" style="height: 60%"></div>
+                                <div class="waveform-bar" style="height: 40%"></div>
+                                <div class="waveform-bar" style="height: 75%"></div>
+                                <div class="waveform-bar" style="height: 50%"></div>
+                                <div class="waveform-bar" style="height: 30%"></div>
+                                <div class="waveform-bar" style="height: 65%"></div>
+                                <div class="waveform-bar" style="height: 80%"></div>
+                                <div class="waveform-bar" style="height: 45%"></div>
+                                <div class="waveform-bar" style="height: 55%"></div>
+                                <div class="waveform-bar" style="height: 35%"></div>
+                            </div>
+                            <button class="transcript-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                    <polyline points="14 2 14 8 20 8"/>
+                                    <line x1="16" y1="13" x2="8" y2="13"/>
+                                    <line x1="16" y1="17" x2="8" y2="17"/>
+                                </svg>
+                                Transcript
+                            </button>
+                        </div>
+                    </div>
+                    <div class="call-item">
+                        <div class="call-info">
+                            <div class="call-lead">
+                                <span class="call-name">Sarah Johnson</span>
+                                <span class="call-phone">(555) 987-6543</span>
+                            </div>
+                            <div class="call-meta">
+                                <span class="call-date">Dec 13, 2025 at 11:15 AM</span>
+                                <span class="call-duration">3:47</span>
+                                <span class="status-tag status-transferred">Transferred</span>
+                            </div>
+                        </div>
+                        <div class="call-player">
+                            <button class="play-btn">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="5 3 19 12 5 21 5 3"/>
+                                </svg>
+                            </button>
+                            <div class="waveform">
+                                <div class="waveform-bar" style="height: 35%"></div>
+                                <div class="waveform-bar" style="height: 60%"></div>
+                                <div class="waveform-bar" style="height: 45%"></div>
+                                <div class="waveform-bar" style="height: 80%"></div>
+                                <div class="waveform-bar" style="height: 55%"></div>
+                                <div class="waveform-bar" style="height: 70%"></div>
+                                <div class="waveform-bar" style="height: 40%"></div>
+                                <div class="waveform-bar" style="height: 65%"></div>
+                                <div class="waveform-bar" style="height: 50%"></div>
+                                <div class="waveform-bar" style="height: 75%"></div>
+                                <div class="waveform-bar" style="height: 30%"></div>
+                                <div class="waveform-bar" style="height: 55%"></div>
+                                <div class="waveform-bar" style="height: 85%"></div>
+                                <div class="waveform-bar" style="height: 45%"></div>
+                                <div class="waveform-bar" style="height: 60%"></div>
+                            </div>
+                            <button class="transcript-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                    <polyline points="14 2 14 8 20 8"/>
+                                    <line x1="16" y1="13" x2="8" y2="13"/>
+                                    <line x1="16" y1="17" x2="8" y2="17"/>
+                                </svg>
+                                Transcript
+                            </button>
+                        </div>
+                    </div>
+                    <div class="call-item">
+                        <div class="call-info">
+                            <div class="call-lead">
+                                <span class="call-name">Michael Chen</span>
+                                <span class="call-phone">(555) 456-7890</span>
+                            </div>
+                            <div class="call-meta">
+                                <span class="call-date">Dec 12, 2025 at 4:52 PM</span>
+                                <span class="call-duration">5:12</span>
+                                <span class="status-tag status-qualified">Qualified</span>
+                            </div>
+                        </div>
+                        <div class="call-player">
+                            <button class="play-btn">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="5 3 19 12 5 21 5 3"/>
+                                </svg>
+                            </button>
+                            <div class="waveform">
+                                <div class="waveform-bar" style="height: 50%"></div>
+                                <div class="waveform-bar" style="height: 70%"></div>
+                                <div class="waveform-bar" style="height: 35%"></div>
+                                <div class="waveform-bar" style="height: 60%"></div>
+                                <div class="waveform-bar" style="height: 90%"></div>
+                                <div class="waveform-bar" style="height: 45%"></div>
+                                <div class="waveform-bar" style="height: 75%"></div>
+                                <div class="waveform-bar" style="height: 55%"></div>
+                                <div class="waveform-bar" style="height: 40%"></div>
+                                <div class="waveform-bar" style="height: 85%"></div>
+                                <div class="waveform-bar" style="height: 65%"></div>
+                                <div class="waveform-bar" style="height: 50%"></div>
+                                <div class="waveform-bar" style="height: 70%"></div>
+                                <div class="waveform-bar" style="height: 30%"></div>
+                                <div class="waveform-bar" style="height: 55%"></div>
+                            </div>
+                            <button class="transcript-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                    <polyline points="14 2 14 8 20 8"/>
+                                    <line x1="16" y1="13" x2="8" y2="13"/>
+                                    <line x1="16" y1="17" x2="8" y2="17"/>
+                                </svg>
+                                Transcript
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Compliance Section -->
+        <section id="compliance" class="dashboard-section">
+            <div class="compliance-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Compliance Documentation</h2>
+                    </div>
+                    <div class="compliance-info">
+                        <p class="compliance-intro">Every lead includes a complete compliance record. Click any lead to view their consent documentation, timestamps, and source attribution.</p>
+
+                        <div class="compliance-checklist">
+                            <div class="compliance-item">
+                                <div class="compliance-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                        <polyline points="22 4 12 14.01 9 11.01"/>
+                                    </svg>
+                                </div>
+                                <div class="compliance-content">
+                                    <h4>Consent Confirmation</h4>
+                                    <p>Proof the lead opted in to be contacted</p>
+                                </div>
+                            </div>
+                            <div class="compliance-item">
+                                <div class="compliance-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <polyline points="12 6 12 12 16 14"/>
+                                    </svg>
+                                </div>
+                                <div class="compliance-content">
+                                    <h4>Timestamps</h4>
+                                    <p>Exact date and time of submission</p>
+                                </div>
+                            </div>
+                            <div class="compliance-item">
+                                <div class="compliance-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <line x1="2" y1="12" x2="22" y2="12"/>
+                                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                                    </svg>
+                                </div>
+                                <div class="compliance-content">
+                                    <h4>Source Attribution</h4>
+                                    <p>Which campaign and platform generated the lead</p>
+                                </div>
+                            </div>
+                            <div class="compliance-item">
+                                <div class="compliance-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72"/>
+                                    </svg>
+                                </div>
+                                <div class="compliance-content">
+                                    <h4>Call Recordings</h4>
+                                    <p>If applicable, the recorded qualification call</p>
+                                </div>
+                            </div>
+                            <div class="compliance-item">
+                                <div class="compliance-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                        <polyline points="14 2 14 8 20 8"/>
+                                    </svg>
+                                </div>
+                                <div class="compliance-content">
+                                    <h4>Consent Language</h4>
+                                    <p>The exact disclosure shown to the lead</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Sample Consent Record</h2>
+                    </div>
+                    <div class="consent-example">
+                        <div class="consent-field">
+                            <span class="consent-label">Lead Name</span>
+                            <span class="consent-value">John Martinez</span>
+                        </div>
+                        <div class="consent-field">
+                            <span class="consent-label">Submission Time</span>
+                            <span class="consent-value">Dec 13, 2025 at 2:31:47 PM EST</span>
+                        </div>
+                        <div class="consent-field">
+                            <span class="consent-label">IP Address</span>
+                            <span class="consent-value">192.168.xxx.xxx</span>
+                        </div>
+                        <div class="consent-field">
+                            <span class="consent-label">Source</span>
+                            <span class="consent-value">Meta Ads - NEC Campaign</span>
+                        </div>
+                        <div class="consent-field">
+                            <span class="consent-label">Landing Page</span>
+                            <span class="consent-value">nec-lawsuit-info.com/claim</span>
+                        </div>
+                        <div class="consent-field full-width">
+                            <span class="consent-label">Consent Language Displayed</span>
+                            <span class="consent-value consent-text">"By submitting this form, I consent to be contacted by phone, text, or email regarding my potential legal claim. I understand that submitting this form does not create an attorney-client relationship."</span>
+                        </div>
+                        <div class="consent-field">
+                            <span class="consent-label">TCPA Consent</span>
+                            <span class="consent-value consent-confirmed">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                    <polyline points="22 4 12 14.01 9 11.01"/>
+                                </svg>
+                                Confirmed
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reports Section -->
+        <section id="reports" class="dashboard-section">
+            <div class="reports-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Available Reports</h2>
+                    </div>
+                    <div class="reports-list">
+                        <div class="report-item">
+                            <div class="report-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                    <polyline points="14 2 14 8 20 8"/>
+                                </svg>
+                            </div>
+                            <div class="report-info">
+                                <h4>Weekly Summary</h4>
+                                <p>Lead volume, qualification rates, transfers</p>
+                                <span class="report-date">Generated every Monday</span>
+                            </div>
+                            <button class="btn btn-secondary btn-sm">Download</button>
+                        </div>
+                        <div class="report-item">
+                            <div class="report-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                    <polyline points="14 2 14 8 20 8"/>
+                                </svg>
+                            </div>
+                            <div class="report-info">
+                                <h4>Monthly Performance Report</h4>
+                                <p>Full summary with CPL, conversions, recommendations</p>
+                                <span class="report-date">Generated 1st of each month</span>
+                            </div>
+                            <button class="btn btn-secondary btn-sm">Download</button>
+                        </div>
+                        <div class="report-item">
+                            <div class="report-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                    <polyline points="14 2 14 8 20 8"/>
+                                </svg>
+                            </div>
+                            <div class="report-info">
+                                <h4>Lead Export</h4>
+                                <p>Full lead data export (CSV)</p>
+                                <span class="report-date">On demand</span>
+                            </div>
+                            <button class="btn btn-secondary btn-sm">Export</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Report Archive</h2>
+                    </div>
+                    <div class="archive-list">
+                        <div class="archive-item">
+                            <span class="archive-name">December 2025 - Monthly Report</span>
+                            <span class="archive-date">Dec 1, 2025</span>
+                            <button class="btn-icon" title="Download">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="7 10 12 15 17 10"/>
+                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="archive-item">
+                            <span class="archive-name">Week of Dec 9, 2025 - Weekly Summary</span>
+                            <span class="archive-date">Dec 9, 2025</span>
+                            <button class="btn-icon" title="Download">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="7 10 12 15 17 10"/>
+                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="archive-item">
+                            <span class="archive-name">Week of Dec 2, 2025 - Weekly Summary</span>
+                            <span class="archive-date">Dec 2, 2025</span>
+                            <button class="btn-icon" title="Download">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="7 10 12 15 17 10"/>
+                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="archive-item">
+                            <span class="archive-name">November 2025 - Monthly Report</span>
+                            <span class="archive-date">Nov 1, 2025</span>
+                            <button class="btn-icon" title="Download">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="7 10 12 15 17 10"/>
+                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Lead Detail Modal -->
+    <div class="modal" id="leadModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Lead Details</h3>
+                <button class="modal-close">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="lead-detail-grid">
+                    <div class="lead-detail-section">
+                        <h4>Contact Information</h4>
+                        <div class="detail-field">
+                            <span class="detail-label">Name</span>
+                            <span class="detail-value" id="modalName">John Martinez</span>
+                        </div>
+                        <div class="detail-field">
+                            <span class="detail-label">Phone</span>
+                            <span class="detail-value" id="modalPhone">(555) 123-4567</span>
+                        </div>
+                        <div class="detail-field">
+                            <span class="detail-label">Email</span>
+                            <span class="detail-value" id="modalEmail">john.m@email.com</span>
+                        </div>
+                    </div>
+                    <div class="lead-detail-section">
+                        <h4>Lead Status</h4>
+                        <div class="detail-field">
+                            <span class="detail-label">Current Status</span>
+                            <span class="status-tag status-signed" id="modalStatus">Signed</span>
+                        </div>
+                        <div class="detail-field">
+                            <span class="detail-label">Source</span>
+                            <span class="detail-value" id="modalSource">Meta - NEC</span>
+                        </div>
+                        <div class="detail-field">
+                            <span class="detail-label">Submitted</span>
+                            <span class="detail-value" id="modalDate">Dec 13, 2025 at 2:31 PM</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="lead-detail-section">
+                    <h4>Call Recording</h4>
+                    <div class="modal-player">
+                        <button class="play-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="5 3 19 12 5 21 5 3"/>
+                            </svg>
+                        </button>
+                        <div class="waveform">
+                            <div class="waveform-bar" style="height: 20%"></div>
+                            <div class="waveform-bar" style="height: 45%"></div>
+                            <div class="waveform-bar" style="height: 70%"></div>
+                            <div class="waveform-bar" style="height: 55%"></div>
+                            <div class="waveform-bar" style="height: 85%"></div>
+                            <div class="waveform-bar" style="height: 60%"></div>
+                            <div class="waveform-bar" style="height: 40%"></div>
+                            <div class="waveform-bar" style="height: 75%"></div>
+                            <div class="waveform-bar" style="height: 50%"></div>
+                            <div class="waveform-bar" style="height: 30%"></div>
+                        </div>
+                        <span class="duration">4:23</span>
+                    </div>
+                </div>
+                <div class="lead-detail-section">
+                    <h4>Transcript</h4>
+                    <div class="transcript-content">
+                        <p><strong>Agent:</strong> Hi, this is Sarah from the NEC legal information line. Am I speaking with John?</p>
+                        <p><strong>Lead:</strong> Yes, this is John.</p>
+                        <p><strong>Agent:</strong> Great, John. I'm following up on the form you submitted about the NEC baby formula lawsuit. I have a few quick questions to see if you may qualify. Is now a good time?</p>
+                        <p><strong>Lead:</strong> Yes, go ahead.</p>
+                        <p><strong>Agent:</strong> Thank you. First, were you or your child given NEC baby formula while in the hospital?</p>
+                        <p><strong>Lead:</strong> Yes, my daughter was given formula in the NICU...</p>
+                    </div>
+                </div>
+                <div class="lead-detail-section">
+                    <h4>Compliance Record</h4>
+                    <div class="compliance-mini">
+                        <div class="detail-field">
+                            <span class="detail-label">TCPA Consent</span>
+                            <span class="detail-value consent-confirmed">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                    <polyline points="22 4 12 14.01 9 11.01"/>
+                                </svg>
+                                Confirmed
+                            </span>
+                        </div>
+                        <div class="detail-field">
+                            <span class="detail-label">Submission IP</span>
+                            <span class="detail-value">192.168.xxx.xxx</span>
+                        </div>
+                        <div class="detail-field">
+                            <span class="detail-label">Landing Page</span>
+                            <span class="detail-value">nec-lawsuit-info.com/claim</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>
