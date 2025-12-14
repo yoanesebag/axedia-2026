@@ -1959,3 +1959,421 @@ h1, h2, h3, h4, h5, h6 {
 ::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.2);
 }
+
+/* =====================================================
+   ACCESSIBILITY - Skip Link
+   ===================================================== */
+.skip-link {
+    position: absolute;
+    top: -100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-accent);
+    color: var(--color-bg);
+    padding: 12px 24px;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    text-decoration: none;
+    z-index: 10000;
+    transition: top 0.3s ease;
+}
+
+.skip-link:focus {
+    top: 16px;
+}
+
+/* Focus States for Accessibility */
+*:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+}
+
+.btn:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 4px;
+    box-shadow: 0 0 0 4px rgba(0, 255, 255, 0.2);
+}
+
+.faq-question:focus-visible {
+    outline: 2px solid #0099ff;
+    outline-offset: 2px;
+}
+
+/* =====================================================
+   SCROLL TO TOP BUTTON WITH PROGRESS RING
+   ===================================================== */
+.scroll-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.scroll-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.scroll-to-top:hover {
+    background: rgba(0, 153, 255, 0.15);
+    border-color: var(--color-accent-blue);
+    transform: translateY(-3px);
+}
+
+.scroll-to-top .progress-ring {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: rotate(-90deg);
+}
+
+.scroll-to-top .progress-ring-circle {
+    stroke-dasharray: 138.23;
+    stroke-dashoffset: 138.23;
+    transition: stroke-dashoffset 0.1s ease;
+}
+
+.scroll-to-top .arrow-icon {
+    color: var(--color-text-muted);
+    transition: color 0.2s ease;
+}
+
+.scroll-to-top:hover .arrow-icon {
+    color: var(--color-accent);
+}
+
+/* =====================================================
+   MOBILE STICKY CTA BAR
+   ===================================================== */
+.mobile-sticky-cta {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(8, 7, 28, 0.95);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid var(--color-border);
+    padding: 12px 20px;
+    z-index: 998;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+}
+
+.mobile-sticky-cta.visible {
+    transform: translateY(0);
+}
+
+.mobile-sticky-cta .btn {
+    width: 100%;
+    padding: 14px 24px;
+    font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+    .mobile-sticky-cta {
+        display: block;
+    }
+
+    .scroll-to-top {
+        bottom: 90px;
+        right: 20px;
+        width: 44px;
+        height: 44px;
+    }
+
+    .scroll-to-top .progress-ring {
+        width: 44px;
+        height: 44px;
+    }
+
+    .scroll-to-top .progress-ring-circle {
+        r: 19;
+        cx: 22;
+        cy: 22;
+        stroke-dasharray: 119.38;
+        stroke-dashoffset: 119.38;
+    }
+}
+
+/* =====================================================
+   COOKIE CONSENT BANNER
+   ===================================================== */
+.cookie-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(13, 12, 30, 0.98);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid var(--color-border);
+    padding: 20px;
+    z-index: 9999;
+    transform: translateY(100%);
+    transition: transform 0.4s ease;
+}
+
+.cookie-banner.visible {
+    transform: translateY(0);
+}
+
+.cookie-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.cookie-content p {
+    flex: 1;
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin: 0;
+    min-width: 280px;
+}
+
+.cookie-content a {
+    color: var(--color-accent-blue);
+    text-decoration: underline;
+}
+
+.cookie-actions {
+    display: flex;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.cookie-btn {
+    padding: 10px 20px;
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    font-family: var(--font-primary);
+}
+
+.cookie-btn-accept {
+    background: linear-gradient(135deg, var(--color-accent), var(--color-accent-blue));
+    color: var(--color-bg);
+}
+
+.cookie-btn-accept:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 255, 255, 0.3);
+}
+
+.cookie-btn-decline {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border);
+}
+
+.cookie-btn-decline:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--color-text);
+}
+
+@media (max-width: 600px) {
+    .cookie-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .cookie-actions {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .cookie-banner {
+        padding-bottom: 80px; /* Space for mobile CTA */
+    }
+}
+
+/* =====================================================
+   HOVER MICRO-INTERACTIONS FOR CARDS
+   ===================================================== */
+.about-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.about-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 153, 255, 0.15);
+}
+
+.about-card:hover .about-card-icon {
+    transform: scale(1.1);
+    background: linear-gradient(135deg, rgba(0, 153, 255, 0.2) 0%, rgba(0, 255, 255, 0.15) 100%);
+}
+
+.about-card-icon {
+    transition: all 0.3s ease;
+}
+
+.testimonial-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.testimonial-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(0, 255, 255, 0.2);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+.vendor-model {
+    transition: all 0.3s ease;
+}
+
+.vendor-model:hover {
+    transform: translateY(-4px);
+}
+
+.vendor-model-good:hover {
+    box-shadow: 0 10px 30px rgba(0, 255, 255, 0.15);
+}
+
+.pilot-benefit {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pilot-benefit:hover {
+    transform: translateX(8px);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(0, 255, 255, 0.3);
+}
+
+.pilot-benefit:hover svg {
+    transform: scale(1.2);
+}
+
+.pilot-benefit svg {
+    transition: transform 0.3s ease;
+}
+
+.dashboard-feature {
+    transition: all 0.3s ease;
+    border-radius: var(--radius-lg);
+}
+
+.dashboard-feature:hover {
+    background: rgba(0, 119, 204, 0.05);
+    transform: translateY(-4px);
+}
+
+.dashboard-feature:hover .dashboard-feature-icon {
+    transform: scale(1.1);
+    box-shadow: 0 8px 20px rgba(0, 119, 204, 0.2);
+}
+
+.dashboard-feature-icon {
+    transition: all 0.3s ease;
+}
+
+/* Flow step hover effects */
+.flow-step .flow-icon {
+    transition: all 0.3s ease;
+}
+
+.flow-step:hover .flow-icon {
+    transform: scale(1.1);
+    border-color: var(--color-accent);
+}
+
+.flow-step-highlight:hover .flow-icon-box {
+    box-shadow: 0 0 40px rgba(0, 255, 255, 0.25);
+}
+
+/* =====================================================
+   SCROLL-TRIGGERED ANIMATIONS
+   ===================================================== */
+.animate-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.animate-on-scroll.animated {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.animate-slide-left {
+    opacity: 0;
+    transform: translateX(-30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.animate-slide-left.animated {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.animate-slide-right {
+    opacity: 0;
+    transform: translateX(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.animate-slide-right.animated {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.animate-scale {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.animate-scale.animated {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Stagger animations for children */
+.stagger-children > * {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.stagger-children.animated > *:nth-child(1) { transition-delay: 0.1s; }
+.stagger-children.animated > *:nth-child(2) { transition-delay: 0.2s; }
+.stagger-children.animated > *:nth-child(3) { transition-delay: 0.3s; }
+.stagger-children.animated > *:nth-child(4) { transition-delay: 0.4s; }
+.stagger-children.animated > *:nth-child(5) { transition-delay: 0.5s; }
+.stagger-children.animated > *:nth-child(6) { transition-delay: 0.6s; }
+
+.stagger-children.animated > * {
+    opacity: 1;
+    transform: translateY(0);
+}

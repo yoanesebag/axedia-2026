@@ -1,0 +1,12 @@
+# Robots.txt for Axedia
+# https://axedia.io
+
+User-agent: *
+Allow: /
+
+# Disallow private/authenticated pages
+Disallow: /login.html
+Disallow: /dashboard.html
+
+# Sitemap location
+Sitemap: https://axedia.io/sitemap.xml

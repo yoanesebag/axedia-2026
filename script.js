@@ -321,5 +321,162 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // =====================================================
+    // SCROLL TO TOP BUTTON WITH PROGRESS INDICATOR
+    // =====================================================
+    const scrollToTopBtn = document.getElementById('scrollToTop');
+
+    if (scrollToTopBtn) {
+        const progressCircle = scrollToTopBtn.querySelector('.progress-ring-circle');
+        const circumference = 2 * Math.PI * 22; // r=22 for 50px button
+
+        if (progressCircle) {
+            progressCircle.style.strokeDasharray = circumference;
+            progressCircle.style.strokeDashoffset = circumference;
+        }
+
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = scrollTop / docHeight;
+
+            // Show/hide button
+            if (scrollTop > 400) {
+                scrollToTopBtn.classList.add('visible');
+            } else {
+                scrollToTopBtn.classList.remove('visible');
+            }
+
+            // Update progress ring
+            if (progressCircle) {
+                const offset = circumference - (scrollPercent * circumference);
+                progressCircle.style.strokeDashoffset = offset;
+            }
+        });
+
+        scrollToTopBtn.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }
+
+    // =====================================================
+    // MOBILE STICKY CTA BAR
+    // =====================================================
+    const mobileCta = document.getElementById('mobileCta');
+
+    if (mobileCta) {
+        let lastScrollTop = 0;
+        const heroHeight = document.querySelector('.hero')?.offsetHeight || 600;
+
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+            // Show after scrolling past hero section
+            if (scrollTop > heroHeight && window.innerWidth <= 768) {
+                // Hide when scrolling down quickly, show when scrolling up or slow scroll
+                if (scrollTop > lastScrollTop + 10) {
+                    mobileCta.classList.remove('visible');
+                } else {
+                    mobileCta.classList.add('visible');
+                }
+            } else {
+                mobileCta.classList.remove('visible');
+            }
+
+            lastScrollTop = scrollTop;
+        });
+    }
+
+    // =====================================================
+    // COOKIE CONSENT BANNER
+    // =====================================================
+    const cookieBanner = document.getElementById('cookieBanner');
+    const acceptCookies = document.getElementById('acceptCookies');
+    const declineCookies = document.getElementById('declineCookies');
+
+    if (cookieBanner) {
+        // Check if user has already made a choice
+        const cookieConsent = localStorage.getItem('axedia_cookie_consent');
+
+        if (!cookieConsent) {
+            // Show banner after a short delay
+            setTimeout(() => {
+                cookieBanner.classList.add('visible');
+            }, 1500);
+        }
+
+        if (acceptCookies) {
+            acceptCookies.addEventListener('click', function() {
+                localStorage.setItem('axedia_cookie_consent', 'accepted');
+                cookieBanner.classList.remove('visible');
+                // Here you would initialize analytics, etc.
+            });
+        }
+
+        if (declineCookies) {
+            declineCookies.addEventListener('click', function() {
+                localStorage.setItem('axedia_cookie_consent', 'declined');
+                cookieBanner.classList.remove('visible');
+            });
+        }
+    }
+
+    // =====================================================
+    // SCROLL-TRIGGERED ANIMATIONS
+    // =====================================================
+    const animatedElements = document.querySelectorAll('.animate-on-scroll, .animate-slide-left, .animate-slide-right, .animate-scale, .stagger-children');
+
+    if (animatedElements.length > 0) {
+        const animationObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animated');
+                    // Optionally stop observing after animation
+                    // animationObserver.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        animatedElements.forEach(el => animationObserver.observe(el));
+    }
+
+    // =====================================================
+    // LAZY LOADING FOR IMAGES
+    // =====================================================
+    const lazyImages = document.querySelectorAll('img[loading="lazy"]');
+
+    // Add fade-in effect for lazy loaded images
+    lazyImages.forEach(img => {
+        img.style.opacity = '0';
+        img.style.transition = 'opacity 0.5s ease';
+
+        if (img.complete) {
+            img.style.opacity = '1';
+        } else {
+            img.addEventListener('load', function() {
+                this.style.opacity = '1';
+            });
+        }
+    });
+
+    // =====================================================
+    // PRELOAD CRITICAL RESOURCES
+    // =====================================================
+    // Preload fonts and critical images after page load
+    window.addEventListener('load', function() {
+        // Add font-display: swap support check
+        if ('fonts' in document) {
+            document.fonts.ready.then(function() {
+                document.body.classList.add('fonts-loaded');
+            });
+        }
+    });
+
     console.log('Axedia website initialized successfully!');
 });
