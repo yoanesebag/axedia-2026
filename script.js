@@ -478,5 +478,375 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // =====================================================
+    // CALENDAR BOOKING POPUP
+    // =====================================================
+    const calendarOverlay = document.getElementById('calendarOverlay');
+    const calendarClose = document.getElementById('calendarClose');
+    const calendarDays = document.getElementById('calendarDays');
+    const currentMonthEl = document.getElementById('currentMonth');
+    const prevMonthBtn = document.getElementById('prevMonth');
+    const nextMonthBtn = document.getElementById('nextMonth');
+    const timeSlotsEl = document.getElementById('timeSlots');
+    const userTimezoneEl = document.getElementById('userTimezone');
+
+    // Steps
+    const stepDate = document.getElementById('stepDate');
+    const stepForm = document.getElementById('stepForm');
+    const stepConfirm = document.getElementById('stepConfirm');
+    const backToDateBtn = document.getElementById('backToDate');
+    const bookingForm = document.getElementById('bookingForm');
+    const closeConfirmationBtn = document.getElementById('closeConfirmation');
+
+    // Display elements
+    const selectedDateEl = document.getElementById('selectedDate');
+    const selectedTimeEl = document.getElementById('selectedTime');
+    const confirmDateEl = document.getElementById('confirmDate');
+    const confirmTimeEl = document.getElementById('confirmTime');
+    const confirmEmailEl = document.getElementById('confirmEmail');
+
+    // Calendar state
+    let currentDate = new Date();
+    let selectedDay = null;
+    let selectedTime = null;
+
+    // Available time slots (9 AM - 5 PM, 30-min intervals)
+    const timeSlots = [
+        '9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM',
+        '12:00 PM', '12:30 PM', '1:00 PM', '1:30 PM', '2:00 PM', '2:30 PM',
+        '3:00 PM', '3:30 PM', '4:00 PM', '4:30 PM'
+    ];
+
+    // Detect user timezone
+    function getUserTimezone() {
+        try {
+            const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            const abbr = new Date().toLocaleTimeString('en-us', { timeZoneName: 'short' }).split(' ')[2];
+            return `${tz.replace(/_/g, ' ')} (${abbr})`;
+        } catch (e) {
+            return 'Eastern Time (ET)';
+        }
+    }
+
+    // Open calendar popup
+    function openCalendar() {
+        if (calendarOverlay) {
+            calendarOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            renderCalendar();
+            if (userTimezoneEl) {
+                userTimezoneEl.textContent = getUserTimezone();
+            }
+        }
+    }
+
+    // Close calendar popup
+    function closeCalendar() {
+        if (calendarOverlay) {
+            calendarOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+            // Reset state
+            resetCalendar();
+        }
+    }
+
+    // Reset calendar state
+    function resetCalendar() {
+        selectedDay = null;
+        selectedTime = null;
+        currentDate = new Date();
+        if (stepDate) stepDate.classList.remove('hidden');
+        if (stepForm) stepForm.classList.add('hidden');
+        if (stepConfirm) stepConfirm.classList.add('hidden');
+        if (timeSlotsEl) {
+            timeSlotsEl.innerHTML = '<p class="time-slots-empty">Select a date to see available times</p>';
+        }
+        if (bookingForm) bookingForm.reset();
+    }
+
+    // Render calendar
+    function renderCalendar() {
+        if (!calendarDays || !currentMonthEl) return;
+
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth();
+
+        // Update month display
+        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'];
+        currentMonthEl.textContent = `${monthNames[month]} ${year}`;
+
+        // Get first day of month and total days
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+        // Today's date for comparison
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        // Clear and render days
+        calendarDays.innerHTML = '';
+
+        // Previous month days
+        for (let i = firstDay - 1; i >= 0; i--) {
+            const dayEl = document.createElement('button');
+            dayEl.className = 'calendar-day other-month disabled';
+            dayEl.textContent = daysInPrevMonth - i;
+            dayEl.disabled = true;
+            calendarDays.appendChild(dayEl);
+        }
+
+        // Current month days
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dayEl = document.createElement('button');
+            dayEl.className = 'calendar-day';
+            dayEl.textContent = day;
+
+            const dateToCheck = new Date(year, month, day);
+            dateToCheck.setHours(0, 0, 0, 0);
+
+            // Check if past date or weekend
+            const dayOfWeek = dateToCheck.getDay();
+            const isPast = dateToCheck < today;
+            const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+            const isToday = dateToCheck.getTime() === today.getTime();
+
+            if (isPast || isWeekend) {
+                dayEl.classList.add('disabled');
+                dayEl.disabled = true;
+            } else {
+                dayEl.addEventListener('click', () => selectDay(day, month, year));
+            }
+
+            if (isToday) {
+                dayEl.classList.add('today');
+            }
+
+            if (selectedDay && selectedDay.day === day && selectedDay.month === month && selectedDay.year === year) {
+                dayEl.classList.add('selected');
+            }
+
+            calendarDays.appendChild(dayEl);
+        }
+
+        // Next month days to fill grid
+        const totalCells = calendarDays.children.length;
+        const remaining = 42 - totalCells; // 6 rows × 7 days
+        for (let i = 1; i <= remaining && totalCells + i <= 42; i++) {
+            const dayEl = document.createElement('button');
+            dayEl.className = 'calendar-day other-month disabled';
+            dayEl.textContent = i;
+            dayEl.disabled = true;
+            calendarDays.appendChild(dayEl);
+        }
+
+        // Update navigation buttons
+        const prevMonth = new Date(year, month - 1, 1);
+        if (prevMonthBtn) {
+            prevMonthBtn.disabled = prevMonth < new Date(today.getFullYear(), today.getMonth(), 1);
+        }
+    }
+
+    // Select a day
+    function selectDay(day, month, year) {
+        selectedDay = { day, month, year };
+        selectedTime = null;
+        renderCalendar();
+        renderTimeSlots();
+    }
+
+    // Render time slots
+    function renderTimeSlots() {
+        if (!timeSlotsEl || !selectedDay) return;
+
+        timeSlotsEl.innerHTML = '';
+
+        // Simulate some slots being unavailable (random for demo)
+        const unavailable = new Set([
+            timeSlots[Math.floor(Math.random() * timeSlots.length)],
+            timeSlots[Math.floor(Math.random() * timeSlots.length)]
+        ]);
+
+        timeSlots.forEach(time => {
+            if (unavailable.has(time)) return; // Skip unavailable
+
+            const slotEl = document.createElement('button');
+            slotEl.className = 'time-slot';
+            slotEl.textContent = time;
+
+            if (selectedTime === time) {
+                slotEl.classList.add('selected');
+            }
+
+            slotEl.addEventListener('click', () => selectTime(time));
+            timeSlotsEl.appendChild(slotEl);
+        });
+    }
+
+    // Select a time
+    function selectTime(time) {
+        selectedTime = time;
+
+        // Update UI
+        document.querySelectorAll('.time-slot').forEach(slot => {
+            slot.classList.toggle('selected', slot.textContent === time);
+        });
+
+        // Proceed to form
+        setTimeout(() => {
+            goToForm();
+        }, 300);
+    }
+
+    // Go to form step
+    function goToForm() {
+        if (!selectedDay || !selectedTime) return;
+
+        // Format selected date
+        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'];
+        const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const date = new Date(selectedDay.year, selectedDay.month, selectedDay.day);
+        const dayName = dayNames[date.getDay()];
+        const monthName = monthNames[selectedDay.month];
+
+        const dateStr = `${dayName}, ${monthName} ${selectedDay.day}, ${selectedDay.year}`;
+
+        // Calculate end time (30 min later)
+        const [hourMin, period] = selectedTime.split(' ');
+        const [hour, min] = hourMin.split(':').map(Number);
+        let endHour = hour;
+        let endMin = min + 30;
+        let endPeriod = period;
+
+        if (endMin >= 60) {
+            endMin = endMin - 60;
+            endHour = endHour + 1;
+            if (endHour === 12 && period === 'AM') endPeriod = 'PM';
+            if (endHour > 12) endHour = endHour - 12;
+        }
+
+        const timeStr = `${selectedTime} - ${endHour}:${endMin.toString().padStart(2, '0')} ${endPeriod} ${getUserTimezone().split('(')[1]?.replace(')', '') || 'ET'}`;
+
+        // Update display
+        if (selectedDateEl) selectedDateEl.textContent = dateStr;
+        if (selectedTimeEl) selectedTimeEl.textContent = timeStr;
+
+        // Show form
+        if (stepDate) stepDate.classList.add('hidden');
+        if (stepForm) stepForm.classList.remove('hidden');
+    }
+
+    // Go back to date selection
+    function goToDate() {
+        if (stepForm) stepForm.classList.add('hidden');
+        if (stepDate) stepDate.classList.remove('hidden');
+    }
+
+    // Handle form submission
+    function handleBookingSubmit(e) {
+        e.preventDefault();
+
+        const formData = new FormData(e.target);
+        const name = formData.get('name');
+        const email = formData.get('email');
+        const phone = formData.get('phone');
+        const company = formData.get('company');
+        const message = formData.get('message');
+
+        // Here you would typically send this to your backend/email service
+        // For now, we'll simulate a successful booking
+
+        const submitBtn = document.getElementById('submitBooking');
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span>Booking...</span>';
+        }
+
+        // Simulate API call
+        setTimeout(() => {
+            // Update confirmation display
+            if (confirmDateEl) confirmDateEl.textContent = selectedDateEl?.textContent || '';
+            if (confirmTimeEl) confirmTimeEl.textContent = selectedTimeEl?.textContent || '';
+            if (confirmEmailEl) confirmEmailEl.textContent = email;
+
+            // Show confirmation
+            if (stepForm) stepForm.classList.add('hidden');
+            if (stepConfirm) stepConfirm.classList.remove('hidden');
+
+            // Reset button
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `
+                    <span>Confirm Booking</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                `;
+            }
+
+            // Log booking data (in production, send to backend)
+            console.log('Booking submitted:', {
+                date: selectedDateEl?.textContent,
+                time: selectedTimeEl?.textContent,
+                name,
+                email,
+                phone,
+                company,
+                message
+            });
+        }, 1000);
+    }
+
+    // Event listeners
+    if (calendarClose) {
+        calendarClose.addEventListener('click', closeCalendar);
+    }
+
+    if (calendarOverlay) {
+        calendarOverlay.addEventListener('click', (e) => {
+            if (e.target === calendarOverlay) {
+                closeCalendar();
+            }
+        });
+    }
+
+    if (prevMonthBtn) {
+        prevMonthBtn.addEventListener('click', () => {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar();
+        });
+    }
+
+    if (nextMonthBtn) {
+        nextMonthBtn.addEventListener('click', () => {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar();
+        });
+    }
+
+    if (backToDateBtn) {
+        backToDateBtn.addEventListener('click', goToDate);
+    }
+
+    if (bookingForm) {
+        bookingForm.addEventListener('submit', handleBookingSubmit);
+    }
+
+    if (closeConfirmationBtn) {
+        closeConfirmationBtn.addEventListener('click', closeCalendar);
+    }
+
+    // Escape key to close
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && calendarOverlay?.classList.contains('active')) {
+            closeCalendar();
+        }
+    });
+
+    // Expose openCalendar globally for button clicks
+    window.openBookingCalendar = openCalendar;
+
     console.log('Axedia website initialized successfully!');
 });
