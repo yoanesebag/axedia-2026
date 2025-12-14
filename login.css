@@ -26,178 +26,23 @@ body {
     background: var(--color-bg);
     color: var(--color-text);
     min-height: 100vh;
-    overflow-x: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
 }
 
-/* Split Layout */
-.login-page {
-    display: flex;
+/* Login Container */
+.login-container {
+    position: relative;
+    width: 100%;
     min-height: 100vh;
-    position: relative;
-}
-
-/* Left Panel - Login */
-.login-panel {
-    flex: 0 0 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 40px;
-    position: relative;
-    z-index: 2;
-}
-
-.login-panel-inner {
-    width: 100%;
-    max-width: 420px;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
     gap: 24px;
-}
-
-/* Right Panel - Preview */
-.preview-panel {
-    flex: 0 0 50%;
-    background: linear-gradient(135deg, rgba(0, 153, 255, 0.08) 0%, rgba(0, 255, 255, 0.03) 100%);
-    border-left: 1px solid var(--color-border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 60px 40px;
-    position: relative;
-    overflow: hidden;
-}
-
-.preview-panel::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image:
-        linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
-    background-size: 40px 40px;
-    pointer-events: none;
-}
-
-.preview-content {
-    position: relative;
-    z-index: 1;
-    max-width: 520px;
-    width: 100%;
-}
-
-.preview-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 16px;
-    background: rgba(0, 153, 255, 0.1);
-    border: 1px solid rgba(0, 153, 255, 0.2);
-    border-radius: 100px;
-    font-size: 0.8rem;
-    font-weight: 500;
-    color: var(--color-primary);
-    margin-bottom: 24px;
-}
-
-.preview-badge svg {
-    color: var(--color-primary);
-}
-
-.preview-title {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--color-text);
-    line-height: 1.2;
-    margin-bottom: 12px;
-}
-
-.preview-subtitle {
-    font-size: 1rem;
-    color: var(--color-text-muted);
-    line-height: 1.6;
-    margin-bottom: 32px;
-}
-
-.preview-image-wrapper {
-    position: relative;
-    margin-bottom: 32px;
-    border-radius: 12px;
-    overflow: hidden;
-}
-
-.preview-image {
-    width: 100%;
-    height: auto;
-    display: block;
-    border-radius: 12px;
-    border: 1px solid var(--color-border);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-}
-
-.preview-image-glow {
-    position: absolute;
-    bottom: -50%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80%;
-    height: 100%;
-    background: radial-gradient(ellipse, rgba(0, 153, 255, 0.3) 0%, transparent 70%);
-    pointer-events: none;
-}
-
-.preview-features {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.preview-feature {
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-    padding: 16px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid var(--color-border);
-    border-radius: 12px;
-    transition: all 0.2s ease;
-}
-
-.preview-feature:hover {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(0, 153, 255, 0.2);
-}
-
-.feature-icon {
-    flex-shrink: 0;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(0, 153, 255, 0.1);
-    border-radius: 10px;
-    color: var(--color-primary);
-}
-
-.feature-text {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.feature-title {
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--color-text);
-}
-
-.feature-desc {
-    font-size: 0.85rem;
-    color: var(--color-text-muted);
 }
 
 /* Background Effects */
@@ -547,38 +392,6 @@ body {
 }
 
 /* Responsive */
-@media (max-width: 1024px) {
-    .login-page {
-        flex-direction: column;
-    }
-
-    .login-panel {
-        flex: none;
-        padding: 40px 20px;
-    }
-
-    .preview-panel {
-        flex: none;
-        border-left: none;
-        border-top: 1px solid var(--color-border);
-        padding: 40px 20px;
-    }
-
-    .preview-title {
-        font-size: 1.75rem;
-    }
-}
-
-@media (max-width: 768px) {
-    .preview-panel {
-        display: none;
-    }
-
-    .login-panel {
-        min-height: 100vh;
-    }
-}
-
 @media (max-width: 480px) {
     .login-card {
         padding: 36px 24px;
