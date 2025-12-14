@@ -1,12 +1,36 @@
-# Robots.txt for Axedia
+# Robots.txt for Axedia - Law Firm Marketing Agency
 # https://axedia.io
 
+# Allow all crawlers
 User-agent: *
 Allow: /
 
 # Disallow private/authenticated pages
 Disallow: /login.html
 Disallow: /dashboard.html
+Disallow: /auth.js
+Disallow: /dashboard.js
+Disallow: /login.css
+
+# Allow specific bots to crawl everything
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+# Crawl delay for politeness (optional)
+User-agent: *
+Crawl-delay: 1
 
 # Sitemap location
 Sitemap: https://axedia.io/sitemap.xml
+
+# Host (helps some search engines)
+Host: https://axedia.io

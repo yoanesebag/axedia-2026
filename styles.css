@@ -1697,9 +1697,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .footer-grid {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
     gap: 48px;
     margin-bottom: 48px;
 }
@@ -1712,19 +1711,35 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--color-text-muted);
     font-size: 0.9rem;
     max-width: 300px;
+    line-height: 1.7;
 }
 
-.footer-links ul {
+.footer-links h4,
+.footer-services h4,
+.footer-areas h4 {
+    color: var(--color-text);
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.footer-links ul,
+.footer-services ul,
+.footer-areas ul {
     list-style: none;
     display: flex;
-    flex-wrap: wrap;
-    gap: 24px;
+    flex-direction: column;
+    gap: 10px;
 }
 
-.footer-links a {
+.footer-links a,
+.footer-services li,
+.footer-areas li {
     color: var(--color-text-muted);
     text-decoration: none;
-    font-size: 0.9rem;
+    font-size: 0.875rem;
     transition: color 0.2s;
 }
 
@@ -1741,6 +1756,17 @@ h1, h2, h3, h4, h5, h6 {
 .footer-bottom p {
     color: var(--color-text-subtle);
     font-size: 0.875rem;
+    margin-bottom: 8px;
+}
+
+.footer-bottom p:last-child {
+    margin-bottom: 0;
+}
+
+.footer-legal {
+    font-size: 0.8rem !important;
+    color: var(--color-text-subtle);
+    opacity: 0.7;
 }
 
 /* Responsive Design */
@@ -1766,13 +1792,30 @@ h1, h2, h3, h4, h5, h6 {
     }
 
     .footer-grid {
-        flex-direction: column;
-        align-items: center;
+        grid-template-columns: 1fr 1fr;
+        gap: 32px;
+    }
+
+    .footer-brand {
+        grid-column: 1 / -1;
         text-align: center;
     }
 
     .footer-description {
         max-width: none;
+        margin: 0 auto;
+    }
+
+    .footer-links,
+    .footer-services,
+    .footer-areas {
+        text-align: center;
+    }
+
+    .footer-links ul,
+    .footer-services ul,
+    .footer-areas ul {
+        align-items: center;
     }
 }
 
@@ -1887,6 +1930,25 @@ h1, h2, h3, h4, h5, h6 {
 
     .footer-links ul {
         justify-content: center;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        text-align: center;
+    }
+
+    .footer-brand,
+    .footer-links,
+    .footer-services,
+    .footer-areas {
+        text-align: center;
+    }
+
+    .footer-links ul,
+    .footer-services ul,
+    .footer-areas ul {
+        align-items: center;
     }
 }
 
