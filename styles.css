@@ -3479,3 +3479,124 @@ textarea:focus-visible {
         text-align: center;
     }
 }
+
+/* What's In Every Lead Section */
+.lead-includes {
+    padding: 100px 0;
+    background: var(--color-bg-darker);
+    position: relative;
+}
+
+.lead-includes::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.3), transparent);
+}
+
+.lead-items-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 24px;
+    margin-top: 60px;
+}
+
+.lead-item {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    padding: 32px 24px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.lead-item:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(0, 255, 255, 0.2);
+    transform: translateY(-4px);
+}
+
+.lead-item-icon {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 20px;
+    background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(138, 43, 226, 0.1));
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-accent);
+}
+
+.lead-item h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 10px;
+}
+
+.lead-item p {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+}
+
+/* Responsive for lead-includes */
+@media (max-width: 1200px) {
+    .lead-items-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .lead-includes {
+        padding: 80px 0;
+    }
+
+    .lead-items-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        margin-top: 40px;
+    }
+
+    .lead-item {
+        padding: 24px 16px;
+    }
+
+    .lead-item-icon {
+        width: 48px;
+        height: 48px;
+        margin-bottom: 16px;
+    }
+
+    .lead-item-icon svg {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .lead-items-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .lead-item {
+        display: flex;
+        align-items: center;
+        text-align: left;
+        gap: 16px;
+        padding: 20px;
+    }
+
+    .lead-item-icon {
+        margin: 0;
+        flex-shrink: 0;
+    }
+
+    .lead-item h3 {
+        margin-bottom: 4px;
+    }
+}
