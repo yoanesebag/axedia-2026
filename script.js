@@ -1,5 +1,33 @@
 // Axedia Website JavaScript
 
+// Demo Audio Player
+function playDemoAudio() {
+    const audio = document.getElementById('demo-audio');
+    const btn = document.getElementById('demo-audio-btn');
+    const playIcon = btn.querySelector('.play-icon');
+    const pauseIcon = btn.querySelector('.pause-icon');
+    const btnText = btn.querySelector('span');
+
+    if (audio.paused) {
+        audio.play();
+        playIcon.style.display = 'none';
+        pauseIcon.style.display = 'block';
+        btnText.textContent = 'Pause Demo';
+    } else {
+        audio.pause();
+        playIcon.style.display = 'block';
+        pauseIcon.style.display = 'none';
+        btnText.textContent = 'Hear a Demo';
+    }
+
+    // Reset button when audio ends
+    audio.onended = function() {
+        playIcon.style.display = 'block';
+        pauseIcon.style.display = 'none';
+        btnText.textContent = 'Hear a Demo';
+    };
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     // Mobile Menu Toggle
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
