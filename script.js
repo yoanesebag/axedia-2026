@@ -556,15 +556,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Open calendar popup
+    // Open calendar popup (Calendly embedded)
     function openCalendar() {
         if (calendarOverlay) {
             calendarOverlay.classList.add('active');
             document.body.style.overflow = 'hidden';
-            renderCalendar();
-            if (userTimezoneEl) {
-                userTimezoneEl.textContent = getUserTimezone();
-            }
         }
     }
 

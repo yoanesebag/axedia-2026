@@ -2974,6 +2974,18 @@ textarea:focus-visible {
     transition: transform 0.3s ease;
 }
 
+.calendar-popup.calendly-popup {
+    max-width: 650px;
+    padding: 20px;
+    padding-top: 50px;
+    overflow: hidden;
+}
+
+.calendly-inline-widget {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
 .calendar-overlay.active .calendar-popup {
     transform: translateY(0) scale(1);
 }
