@@ -3,6 +3,12 @@
 // JavaScript functionality
 // ============================================
 
+// Google Sheets CSV URL for Sharp Law leads
+const SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSShgbEqUqDGfoNvyjOtEwXRNkO-poAWLYIu4tAlpEgkjPyQSmy8-H4dLSDna5rV75MNzzwFjq-D2mz/pub?gid=2134916183&single=true&output=csv';
+
+// Store leads data globally
+let leadsData = [];
+
 document.addEventListener('DOMContentLoaded', function() {
     // Check authentication first
     if (!Auth.requireAuth()) {
@@ -17,7 +23,172 @@ document.addEventListener('DOMContentLoaded', function() {
     initModal();
     initFilters();
     initPlayButtons();
+
+    // Fetch leads from Google Sheets
+    fetchLeadsFromSheet();
 });
+
+// ============================================
+// GOOGLE SHEETS DATA FETCHING
+// ============================================
+
+async function fetchLeadsFromSheet() {
+    try {
+        const response = await fetch(SHEETS_CSV_URL);
+        const csvText = await response.text();
+        leadsData = parseCSV(csvText);
+
+        // Update dashboard with real data
+        updateLeadsTable(leadsData);
+        updateStatsFromLeads(leadsData);
+
+        console.log('Loaded', leadsData.length, 'leads from Google Sheets');
+    } catch (error) {
+        console.error('Error fetching leads:', error);
+    }
+}
+
+function parseCSV(csvText) {
+    const lines = csvText.split('\n');
+    const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+    const leads = [];
+
+    for (let i = 1; i < lines.length; i++) {
+        if (!lines[i].trim()) continue;
+
+        const values = parseCSVLine(lines[i]);
+        const lead = {};
+
+        headers.forEach((header, index) => {
+            lead[header] = values[index] || '';
+        });
+
+        // Add computed fields
+        lead.fullName = `${lead['First Name'] || ''} ${lead['Last Name'] || ''}`.trim();
+        lead.id = i;
+        lead.dateAdded = new Date().toISOString().split('T')[0]; // Placeholder - update if you have date column
+
+        leads.push(lead);
+    }
+
+    return leads;
+}
+
+function parseCSVLine(line) {
+    const result = [];
+    let current = '';
+    let inQuotes = false;
+
+    for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+
+        if (char === '"') {
+            inQuotes = !inQuotes;
+        } else if (char === ',' && !inQuotes) {
+            result.push(current.trim().replace(/"/g, ''));
+            current = '';
+        } else {
+            current += char;
+        }
+    }
+
+    result.push(current.trim().replace(/"/g, ''));
+    return result;
+}
+
+function updateLeadsTable(leads) {
+    const tableBody = document.getElementById('leadsTableBody');
+    if (!tableBody) return;
+
+    tableBody.innerHTML = '';
+
+    if (leads.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="7" class="loading-row">No leads found</td></tr>';
+        return;
+    }
+
+    leads.forEach(lead => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>
+                <div class="lead-info">
+                    <span class="lead-name">${lead.fullName}</span>
+                    <span class="lead-email">${lead['Email'] || 'N/A'}</span>
+                </div>
+            </td>
+            <td>${lead['Telephone'] || 'N/A'}</td>
+            <td>${lead['In which state do you currently reside?'] || 'N/A'}</td>
+            <td>${lead['Zip'] || 'N/A'}</td>
+            <td><span class="status-badge status-new">New</span></td>
+            <td>
+                <div class="qualifying-answers">
+                    <span class="qa-item">${lead['Used OptumRx Specialty Pharmacy?'] === 'Yes' ? '✓' : '✗'} OptumRx</span>
+                    <span class="qa-item">${lead['Purchased Generic After 1/1/2020?'] === 'Yes' ? '✓' : '✗'} Post-2020</span>
+                    <span class="qa-item">${lead['Generic Order in/to Missouri?'] === 'Yes' ? '✓' : '✗'} Missouri</span>
+                </div>
+            </td>
+            <td>
+                <button class="btn-icon" title="View Details" onclick="viewLeadDetails(${lead.id})">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                </button>
+            </td>
+        `;
+        tableBody.appendChild(row);
+    });
+
+    // Update pagination info
+    const paginationInfo = document.getElementById('paginationInfo');
+    if (paginationInfo) {
+        paginationInfo.textContent = `Showing ${leads.length} leads`;
+    }
+}
+
+function updateStatsFromLeads(leads) {
+    // Update total leads count
+    const totalLeadsEl = document.querySelector('.stat-card:first-child .stat-value');
+    if (totalLeadsEl) {
+        totalLeadsEl.textContent = leads.length;
+    }
+
+    // Update stats cards with real data
+    const statCards = document.querySelectorAll('.stat-card');
+    if (statCards.length >= 1) {
+        // Total Leads
+        const totalValue = statCards[0].querySelector('.stat-value');
+        if (totalValue) totalValue.textContent = leads.length;
+    }
+
+    // Count qualified leads (all 3 qualifying questions = Yes)
+    const qualifiedLeads = leads.filter(lead =>
+        lead['Used OptumRx Specialty Pharmacy?'] === 'Yes' &&
+        lead['Purchased Generic After 1/1/2020?'] === 'Yes' &&
+        lead['Generic Order in/to Missouri?'] === 'Yes'
+    );
+
+    if (statCards.length >= 2) {
+        const qualifiedValue = statCards[1].querySelector('.stat-value');
+        if (qualifiedValue) qualifiedValue.textContent = qualifiedLeads.length;
+    }
+
+    // Calculate qualification rate
+    if (statCards.length >= 3) {
+        const rateValue = statCards[2].querySelector('.stat-value');
+        if (rateValue && leads.length > 0) {
+            const rate = ((qualifiedLeads.length / leads.length) * 100).toFixed(1);
+            rateValue.textContent = rate + '%';
+        }
+    }
+}
+
+function viewLeadDetails(leadId) {
+    const lead = leadsData.find(l => l.id === leadId);
+    if (!lead) return;
+
+    alert(`Lead Details:\n\nName: ${lead.fullName}\nEmail: ${lead['Email']}\nPhone: ${lead['Telephone']}\nState: ${lead['In which state do you currently reside?']}\nZip: ${lead['Zip']}\n\nQualifying Answers:\n- Used OptumRx: ${lead['Used OptumRx Specialty Pharmacy?']}\n- Purchased After 2020: ${lead['Purchased Generic After 1/1/2020?']}\n- Missouri Order: ${lead['Generic Order in/to Missouri?']}`);
+}
 
 // ============================================
 // AUTHENTICATION UI

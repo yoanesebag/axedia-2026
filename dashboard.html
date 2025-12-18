@@ -393,166 +393,25 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Phone</th>
-                                <th>Email</th>
-                                <th>Source</th>
+                                <th>State</th>
+                                <th>Zip</th>
                                 <th>Status</th>
-                                <th>Date</th>
+                                <th>Qualifying Answers</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="leadsTableBody">
                             <tr>
-                                <td class="lead-name">John Martinez</td>
-                                <td class="lead-phone">(555) 123-4567</td>
-                                <td class="lead-email">john.m@email.com</td>
-                                <td><span class="source-tag">Meta - NEC</span></td>
-                                <td><span class="status-tag status-signed">Signed</span></td>
-                                <td class="lead-date">Dec 13, 2025</td>
-                                <td class="actions">
-                                    <button class="btn-icon" title="View Details">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                            <circle cx="12" cy="12" r="3"/>
-                                        </svg>
-                                    </button>
-                                    <button class="btn-icon" title="Play Recording">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <polygon points="5 3 19 12 5 21 5 3"/>
-                                        </svg>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="lead-name">Sarah Johnson</td>
-                                <td class="lead-phone">(555) 987-6543</td>
-                                <td class="lead-email">s.johnson@email.com</td>
-                                <td><span class="source-tag">Meta - Tylenol</span></td>
-                                <td><span class="status-tag status-transferred">Transferred</span></td>
-                                <td class="lead-date">Dec 13, 2025</td>
-                                <td class="actions">
-                                    <button class="btn-icon" title="View Details">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                            <circle cx="12" cy="12" r="3"/>
-                                        </svg>
-                                    </button>
-                                    <button class="btn-icon" title="Play Recording">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <polygon points="5 3 19 12 5 21 5 3"/>
-                                        </svg>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="lead-name">Michael Chen</td>
-                                <td class="lead-phone">(555) 456-7890</td>
-                                <td class="lead-email">mchen@email.com</td>
-                                <td><span class="source-tag">Meta - NEC</span></td>
-                                <td><span class="status-tag status-qualified">Qualified</span></td>
-                                <td class="lead-date">Dec 12, 2025</td>
-                                <td class="actions">
-                                    <button class="btn-icon" title="View Details">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                            <circle cx="12" cy="12" r="3"/>
-                                        </svg>
-                                    </button>
-                                    <button class="btn-icon" title="Play Recording">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <polygon points="5 3 19 12 5 21 5 3"/>
-                                        </svg>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="lead-name">Emily Rodriguez</td>
-                                <td class="lead-phone">(555) 321-0987</td>
-                                <td class="lead-email">emily.r@email.com</td>
-                                <td><span class="source-tag">Meta - Depo-Provera</span></td>
-                                <td><span class="status-tag status-contacted">Contacted</span></td>
-                                <td class="lead-date">Dec 12, 2025</td>
-                                <td class="actions">
-                                    <button class="btn-icon" title="View Details">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                            <circle cx="12" cy="12" r="3"/>
-                                        </svg>
-                                    </button>
-                                    <button class="btn-icon disabled" title="No Recording">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <polygon points="5 3 19 12 5 21 5 3"/>
-                                        </svg>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="lead-name">David Thompson</td>
-                                <td class="lead-phone">(555) 654-3210</td>
-                                <td class="lead-email">d.thompson@email.com</td>
-                                <td><span class="source-tag">Meta - NEC</span></td>
-                                <td><span class="status-tag status-new">New</span></td>
-                                <td class="lead-date">Dec 12, 2025</td>
-                                <td class="actions">
-                                    <button class="btn-icon" title="View Details">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                            <circle cx="12" cy="12" r="3"/>
-                                        </svg>
-                                    </button>
-                                    <button class="btn-icon disabled" title="No Recording">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <polygon points="5 3 19 12 5 21 5 3"/>
-                                        </svg>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="lead-name">Lisa Anderson</td>
-                                <td class="lead-phone">(555) 789-0123</td>
-                                <td class="lead-email">l.anderson@email.com</td>
-                                <td><span class="source-tag">Meta - Tylenol</span></td>
-                                <td><span class="status-tag status-not-signed">Not Signed</span></td>
-                                <td class="lead-date">Dec 11, 2025</td>
-                                <td class="actions">
-                                    <button class="btn-icon" title="View Details">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                            <circle cx="12" cy="12" r="3"/>
-                                        </svg>
-                                    </button>
-                                    <button class="btn-icon" title="Play Recording">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <polygon points="5 3 19 12 5 21 5 3"/>
-                                        </svg>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="lead-name">Robert Wilson</td>
-                                <td class="lead-phone">(555) 234-5678</td>
-                                <td class="lead-email">rwilson@email.com</td>
-                                <td><span class="source-tag">Meta - NEC</span></td>
-                                <td><span class="status-tag status-signed">Signed</span></td>
-                                <td class="lead-date">Dec 11, 2025</td>
-                                <td class="actions">
-                                    <button class="btn-icon" title="View Details">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                            <circle cx="12" cy="12" r="3"/>
-                                        </svg>
-                                    </button>
-                                    <button class="btn-icon" title="Play Recording">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <polygon points="5 3 19 12 5 21 5 3"/>
-                                        </svg>
-                                    </button>
+                                <td colspan="7" class="loading-row">
+                                    <div class="loading-spinner"></div>
+                                    Loading leads from Google Sheets...
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="table-pagination">
-                    <span class="pagination-info">Showing 1-7 of 247 leads</span>
+                    <span class="pagination-info" id="paginationInfo">Loading...</span>
                     <div class="pagination-controls">
                         <button class="btn-pagination" disabled>&lt;</button>
                         <button class="btn-pagination active">1</button>
